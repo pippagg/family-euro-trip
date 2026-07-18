@@ -1,41 +1,199 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-    <meta name="description" content="An interactive event timeline for a family journey through Central Europe." />
-    <meta name="theme-color" content="#102d34" />
-    <title>Central Europe · Family Journey</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <header class="site-header">
-      <div class="header-inner">
-        <a class="brand" href="#top"><span class="brand-mark">✦</span><span><strong>Central Europe</strong><small>Family journey · 2026</small></span></a>
-        <nav aria-label="Primary navigation"><a href="#journey">Journey</a></nav>
-      </div>
-    </header>
-    <main id="top">
-      <section class="hero">
-        <div class="hero-image" role="img" aria-label="Mountain lake in Central Europe"></div><div class="hero-overlay"></div>
-        <div class="hero-content section-shell"><p class="eyebrow light">Switzerland · Austria · Hungary</p><h1>One journey.<br /><em>Seven remarkable stays.</em></h1><p>19 July — 03 August 2026 · 4 travelers</p><a class="button" href="#journey">Follow the route <span>↓</span></a></div>
-      </section>
-      <section class="trip-dock section-shell" aria-labelledby="status-title">
-        <div class="dock-main"><span class="pulse"></span><div><small id="todayLabel">Today</small><strong id="status-title">Your journey is loading</strong></div></div>
-        <div class="dock-stat"><small>Next event</small><strong id="nextUp">—</strong><span id="nextUpDate">—</span></div>
-        <div class="dock-stat"><small>Journey progress</small><strong id="progressLabel">—</strong><div class="progress"><span id="progressBar"></span></div></div>
-        <button class="share-button" id="shareButton" type="button" aria-label="Share itinerary">↗</button>
-      </section>
-      <section class="journey-section section-shell" id="journey" aria-labelledby="journey-title">
-        <div class="section-heading">
-          <div><p class="eyebrow">Your route, in order</p><h2 id="journey-title">The journey</h2><p class="section-intro">Travel, stays and plans together—open only what you need.</p></div>
-          <div class="filters"><label class="search"><span>⌕</span><input id="searchInput" type="search" placeholder="Find a city, hotel or plan" /></label><label class="toggle"><input id="hidePast" type="checkbox" checked /><span></span>Remaining only</label></div>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Journey</title>
+  <!-- Appending ?v=2 forces mobile Safari/Chrome to bust their cache and read the new styles immediately -->
+  <link rel="stylesheet" href="styles.css?v=2">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand">
+        <span class="brand-mark">✦</span>
+        <div>
+          <strong>The Journey</strong>
+          <small>Travel Itinerary</small>
         </div>
-        <div id="timeline" class="timeline" aria-live="polite"></div><p id="emptyState" class="empty-state" hidden>No journey events match this view.</p>
-      </section>
-    </main>
-    <footer><div class="section-shell"><span>Made for the Gupta &amp; Aggarwal family</span><span>16 days · 3 countries · countless memories</span></div></footer>
-    <dialog id="cityDialog" class="city-dialog"><button class="dialog-close" type="button" aria-label="Close city guide">×</button><div id="dialogImage" class="dialog-image"></div><div class="dialog-content"><p id="dialogCountry" class="eyebrow"></p><h2 id="dialogTitle"></h2><p id="dialogAbout" class="dialog-about"></p><div id="dialogFacts" class="dialog-facts"></div><div id="dialogHighlights" class="dialog-highlights"></div><a id="dialogMap" class="button dark" target="_blank" rel="noopener">Explore in Google Maps ↗</a></div></dialog>
-    <div id="toast" class="toast" role="status" aria-live="polite"></div><script src="app.js"></script>
-  </body>
+      </div>
+      <nav>
+        <a href="#timeline">Itinerary</a>
+        <a href="#essentials">Essentials</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-image"></div>
+    <div class="hero-overlay"></div>
+    <div class="section-shell hero-content">
+      <p class="eyebrow light">Current Trip</p>
+      <h1>Switzerland <em>Explorer</em></h1>
+      <p>A multi-city train journey through the heart of the Swiss Alps.</p>
+    </div>
+  </section>
+
+  <main class="section-shell journey-section">
+    <div class="section-heading" id="timeline">
+      <div>
+        <h2>The journey</h2>
+        <p class="section-intro">Travel, stays and plans together—open only what you need.</p>
+      </div>
+      <div class="filters">
+        <div class="search">
+          <span>🔍</span>
+          <input type="text" id="itinerarySearch" placeholder="Find a city, hotel or plan">
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="remainingToggle">
+          <span></span>
+          Remaining only
+        </label>
+      </div>
+    </div>
+
+    <div class="timeline">
+      <!-- EVENT 1: Flight -->
+      <div class="timeline-row">
+        <div class="timeline-marker flight">✈</div>
+        <div class="timeline-event travel-event">
+          <details>
+            <summary>
+              <div class="event-logo flight">✈</div>
+              <div class="summary-copy">
+                <small>INTERNATIONAL FLIGHT · PNR 88AOXJ</small>
+                <strong>New Delhi → Zurich</strong>
+                <span>19 Jul · Arrive 19:00 · Etihad Airways via Abu Dhabi</span>
+              </div>
+              <div class="chevron">↓</div>
+            </summary>
+            <div class="travel-details">
+              <div><small>Flight</small><strong>EY 224 / EY 73</strong></div>
+              <div><small>Terminal</small><strong>T3 → T2</strong></div>
+              <div><small>Status</small><strong>Confirmed</strong></div>
+            </div>
+          </details>
+        </div>
+      </div>
+
+      <!-- EVENT 2: Zurich Destination & Hotel Card -->
+      <div class="timeline-row">
+        <div class="timeline-marker">🏙</div>
+        <div class="timeline-event city-event">
+          <button class="city-visual" style="background-image: url('https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fit=crop&w=600&q=80')">
+            <span>
+              <small>SWITZERLAND</small>
+              <strong>Zurich Airport</strong>
+              <em>Discover the city ↗</em>
+            </span>
+          </button>
+          <div class="city-body">
+            <div class="timeline-event travel-event">
+              <details>
+                <summary>
+                  <div class="event-logo">
+                    <div class="hotel-logo">HZ</div>
+                  </div>
+                  <!-- FIXED: Properly wrapped inside summary-copy -->
+                  <div class="summary-copy">
+                    <small>ZURICH AIRPORT - BOOKING</small>
+                    <small style="color: var(--muted); letter-spacing: 0;">AV2085180324652</small>
+                    <strong>Hilton Zurich Airport</strong>
+                  </div>
+                  <div class="chevron">↓</div>
+                </summary>
+                <div class="travel-details">
+                  <div><small>Check In</small><strong>19 Jul</strong></div>
+                  <div><small>Check Out</small><strong>20 Jul</strong></div>
+                  <div><small>Room Type</small><strong>Standard Queen</strong></div>
+                </div>
+                <div class="event-actions">
+                  <div class="address-container">
+                    📍 Hohenbuehlstrasse 10, 8152 Zurich · <a href="#" class="inline-map-link">Open Map</a>
+                  </div>
+                </div>
+              </details>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EVENT 3: Train Transfer -->
+      <div class="timeline-row">
+        <div class="timeline-marker transfer">🚂</div>
+        <div class="timeline-event travel-event">
+          <details>
+            <summary>
+              <div class="event-logo">🚂</div>
+              <div class="summary-copy">
+                <small>RAIL TRANSFER</small>
+                <strong>Zurich Airport → Lucerne</strong>
+                <span>20 Jul · ~1h 12m · IR13 / IR70 · Swiss Pass</span>
+              </div>
+              <div class="chevron">↓</div>
+            </summary>
+            <div class="travel-details">
+              <div><small>Platform</small><strong>Plat 4</strong></div>
+              <div><small>Type</small><strong>InterRegio</strong></div>
+              <div><small>Frequency</small><strong>Every 30 mins</strong></div>
+            </div>
+          </details>
+        </div>
+      </div>
+
+      <!-- EVENT 4: Lucerne Destination & Hotel Card -->
+      <div class="timeline-row">
+        <div class="timeline-marker">🏙</div>
+        <div class="timeline-event city-event">
+          <button class="city-visual" style="background-image: url('https://images.unsplash.com/photo-1580977252950-a731fa943236?auto=format&fit=crop&w=600&q=80')">
+            <span>
+              <small>SWITZERLAND</small>
+              <strong>Lucerne</strong>
+              <em>Discover the city ↗</em>
+            </span>
+          </button>
+          <div class="city-body">
+            <div class="timeline-event travel-event">
+              <details>
+                <summary>
+                  <div class="event-logo">
+                    <div class="hotel-logo">RH</div>
+                  </div>
+                  <!-- FIXED: Properly wrapped inside summary-copy -->
+                  <div class="summary-copy">
+                    <small>LUCERNE - BOOKING</small>
+                    <small style="color: var(--muted); letter-spacing: 0;">AV2092180284727</small>
+                    <strong>Radisson Blu Lucerne</strong>
+                  </div>
+                  <div class="chevron">↓</div>
+                </summary>
+                <div class="travel-details">
+                  <div><small>Check In</small><strong>20 Jul</strong></div>
+                  <div><small>Check Out</small><strong>22 Jul</strong></div>
+                  <div><small>Room Type</small><strong>Lake View Twin</strong></div>
+                </div>
+                <div class="event-actions">
+                  <div class="address-container">
+                    📍 Lakefront Center, Inseliquai 12, 6005 Lucerne · <a href="#" class="inline-map-link">Open Map</a>
+                  </div>
+                </div>
+              </details>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="section-shell">
+    <div>
+      <span>© 2026 Travel Log</span>
+      <span>Built with Passion</span>
+    </div>
+  </footer>
+
+</body>
 </html>
