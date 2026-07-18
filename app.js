@@ -15,6 +15,7 @@ const events = [
   { type:'stay', start:'2026-07-31', end:'2026-08-03', icon:'🏨', city:'Budapest', country:'Hungary', title:'Budapest', meta:'31 Jul–03 Aug · 3 nights', hotel:'Danubius Erzsébet City Center', room:'2 Superior Double Rooms · Breakfast included', address:'[Károlyi Mihály u. 11–15](https://www.google.com/maps/search/K%C3%A1rolyi%0D%0A+Mih%C3%A1ly+u.+11%E2%80%9315?entry=gmail&source=g), 1053 Budapest', image:'https://images.unsplash.com/photo-1541849546-216549ae216d?auto=format&fit=crop&w=1200&q=85', about:'A magnificent Danube city split between hilly Buda and lively Pest, rich in architecture, thermal baths and river views.', facts:['Language · Hungarian','Currency · HUF','Avg July · 28°C'], highlights:['Parliament','Castle Hill','Danube Promenade'], plans:[['31 Jul','Check in & rest'],['01 Aug','Hop-on hop-off & historic walking tour'],['02 Aug','Danube cruise with audio guide']], map:'https://www.google.com/maps/search/?api=1&query=Danubius+Erzsébet+City+Center+Budapest' },
   { type:'flight', start:'2026-08-03', end:'2026-08-03', icon:'✈', label:'Departure', title:'Budapest → London', meta:'03 Aug · 17:30', summary:'Airport transfer included', details:[['Checkout','By 12:00'],['Transfer','Hotel to Budapest Airport'],['Departure','17:30 to London']], map:'https://www.google.com/maps/search/?api=1&query=Budapest+Ferenc+Liszt+International+Airport' }
 ];
+
 const hotelMetadata = {
   'Hilton Zurich Airport': ['AV2085180324652','[hilton.com](http://hilton.com/)'],
   'Radisson Blu Lucerne': ['AV2092180284727','[radissonhotels.com](http://radissonhotels.com/)'],
@@ -24,14 +25,45 @@ const hotelMetadata = {
   'Leonardo Hotel Vienna City West': ['AV2135670235698','[leonardo-hotels.com](http://leonardo-hotels.com/)'],
   'Danubius Erzsébet City Center': ['AV2031180984322','[danubiushotels.com](http://danubiushotels.com/)']
 };
+
 events.filter(event=>event.type==='stay').forEach(event=>[event.confirmation,event.logo]=hotelMetadata[event.hotel]);
+
 const dateOf=value=>{const[y,m,d]=value.split('-').map(Number);return new Date(y,m-1,d)};
 const today=()=>{const value=new Date();value.setHours(0,0,0,0);return value};
 const eventStatus=(event,now)=>dateOf(event.end)<now?'complete':dateOf(event.start)<=now&&dateOf(event.end)>=now?'current':'upcoming';
 const mapLink=url=>`<a class="map-link" href="${url}" target="_blank" rel="noopener">Open in Google Maps <span>↗</span></a>`;
+
+// Helper utility to convert Markdown style links like [text](url) into clean clickable HTML elements
+const parseMarkdownLinks=text=>{
+  return text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener" class="inline-map-link">$1</a>');
+};
+
 function travelCard(event,status){return `<details class="timeline-event travel-event ${status}"><summary><span class="event-logo ${event.type}">${event.icon}</span><span class="summary-copy"><small>${event.label}</small><strong>${event.title}</strong><span>${event.meta} · ${event.summary}</span></span><span class="chevron">⌄</span></summary><div class="travel-details">${event.details.map(([label,value])=>`<div><small>${label}</small><strong>${value}</strong></div>`).join('')}</div><div class="event-actions">${mapLink(event.map)}</div></details>`}
-function stayCard(event,status,index){const logoDomain=(event.logo.match(/\[([^\]]+)\]/)?.[1]||event.logo);const logo=`https://www.google.com/s2/favicons?domain=${logoDomain}&sz=128`;return `<article class="timeline-event city-event ${status}"><button class="city-visual" data-city="${index}" style="background-image:linear-gradient(90deg,rgba(8,31,38,.76),rgba(8,31,38,.08)),url('${event.image}')" aria-label="Open ${event.city} city guide"><span><small>${event.country}</small><strong>${event.city}</strong><em>Discover the city ↗</em></span></button><div class="city-body"><details class="hotel-details"><summary class="stay-header"><span class="hotel-logo"><img src="${logo}" alt="${event.hotel} logo" /></span><span class="hotel-summary"><small>${event.city} · Booking ${event.confirmation}</small><strong>${event.hotel}</strong><span>⌖ ${event.address}</span></span><span class="chevron">⌄</span></summary><div class="hotel-expanded"><p>${event.room}</p><div class="plan-list">${event.plans.map(([date,plan])=>`<div><time>${date}</time><span>${plan}</span></div>`).join('')}</div><div class="city-footer"><span>Check-in 14:00 · Checkout 12:00</span>${mapLink(event.map)}</div></div></details></div></article>`}
+
+function stayCard(event,status,index){
+  const logoDomain=(event.logo.match(/\[([^\]]+)\]/)?.[1]||event.logo);
+  const logo=`https://www.google.com/s2/favicons?domain=${logoDomain}&sz=128`;
+  const formattedAddress = parseMarkdownLinks(event.address);
+  return `<article class="timeline-event city-event ${status}"><button class="city-visual" data-city="${index}" style="background-image:linear-gradient(90deg,rgba(8,31,38,.76),rgba(8,31,38,.08)),url('${event.image}')" aria-label="Open ${event.city} city guide"><span><small>${event.country}</small><strong>${event.city}</strong><em>Discover the city ↗</em></span></button><div class="city-body"><details class="hotel-details"><summary class="stay-header"><span class="hotel-logo"><img src="${logo}" alt="${event.hotel} logo" /></span><span class="hotel-summary"><small>${event.city} · Booking ${event.confirmation}</small><strong>${event.hotel}</strong><span class="address-container">⌖ ${formattedAddress}</span></span><span class="chevron">⌄</span></summary><div class="hotel-expanded"><p>${event.room}</p><div class="plan-list">${event.plans.map(([date,plan])=>`<div><time>${date}</time><span>${plan}</span></div>`).join('')}</div><div class="city-footer"><span>Check-in 14:00 · Checkout 12:00</span>${mapLink(event.map)}</div></div></details></div></article>`
+}
+
 function renderTimeline(){const now=today(),hidePast=document.querySelector('#hidePast').checked,query=document.querySelector('#searchInput').value.toLowerCase().trim();let shown=0;document.querySelector('#timeline').innerHTML=events.map((event,index)=>{const status=eventStatus(event,now),searchable=`${event.type} ${event.title} ${event.hotel||''} ${event.summary||''} ${(event.plans||[]).flat().join(' ')}`.toLowerCase(),hidden=(hidePast&&status==='complete')||(query&&!searchable.includes(query));if(!hidden)shown++;return `<div class="timeline-row" ${hidden?'hidden':''}><div class="timeline-marker ${event.type} ${status}"><span>${event.icon}</span></div>${event.type==='stay'?stayCard(event,status,index):travelCard(event,status)}</div>`}).join('');document.querySelector('#emptyState').hidden=shown>0;document.querySelectorAll('[data-city]').forEach(button=>button.addEventListener('click',()=>openCity(Number(button.dataset.city))));updateStatus(now)}
+
 function updateStatus(now){const next=events.find(event=>dateOf(event.end)>=now),completed=events.filter(event=>dateOf(event.end)<now).length,current=events.find(event=>eventStatus(event,now)==='current'),percent=Math.round(completed/events.length*100);document.querySelector('#todayLabel').textContent=now.toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long'});document.querySelector('#status-title').textContent=current?`Now: ${current.title}`:now<dateOf(events[0].start)?'The adventure begins tomorrow':'Journey complete';document.querySelector('#nextUp').textContent=next?.title||'Journey complete';document.querySelector('#nextUpDate').textContent=next?.meta||'Until next time';document.querySelector('#progressLabel').textContent=`${percent}% complete`;document.querySelector('#progressBar').style.width=`${percent}%`}
-function openCity(index){const city=events[index];document.querySelector('#dialogImage').style.backgroundImage=`url('${city.image}')`;document.querySelector('#dialogCountry').textContent=city.country;document.querySelector('#dialogTitle').textContent=city.city;document.querySelector('#dialogAbout').textContent=city.about;document.querySelector('#dialogFacts').innerHTML=city.facts.map(fact=>`<span>${fact}</span>`).join('');document.querySelector('#dialogHighlights').innerHTML=`<small>Worth knowing</small><div>${city.highlights.map(item=>`<span>${item}</span>`).join('')}</div>`;document.querySelector('#dialogMap').href=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(city.city)}`;document.querySelector('#cityDialog').showModal()}
+
+function openCity(index){
+  const city=events[index];
+  document.querySelector('#dialogImage').style.backgroundImage=`url('${city.image}')`;
+  document.querySelector('#dialogCountry').textContent=city.country;
+  document.querySelector('#dialogTitle').textContent=city.city;
+  document.querySelector('#dialogAbout').textContent=city.about;
+  document.querySelector('#dialogFacts').innerHTML=city.facts.map(fact=>{
+    const [label, val] = fact.split(' · ');
+    return `<span class="fact-bubble"><strong>${label}:</strong> ${val}</span>`;
+  }).join('');
+  document.querySelector('#dialogHighlights').innerHTML=`<small>Worth knowing</small><div class="highlights-wrap">${city.highlights.map(item=>`<span>${item}</span>`).join('')}</div>`;
+  document.querySelector('#dialogMap').href=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(city.city)}`;
+  document.querySelector('#cityDialog').showModal();
+}
+
 document.querySelector('#searchInput').addEventListener('input',renderTimeline);document.querySelector('#hidePast').addEventListener('change',renderTimeline);document.querySelector('.dialog-close').addEventListener('click',()=>document.querySelector('#cityDialog').close());document.querySelector('#cityDialog').addEventListener('click',event=>{if(event.target.id==='cityDialog')event.target.close()});document.querySelector('#shareButton').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(location.href);toast('Itinerary link copied')}catch{toast('Copy the page address to share')}});function toast(message){const element=document.querySelector('#toast');element.textContent=message;element.classList.add('visible');setTimeout(()=>element.classList.remove('visible'),2500)}renderTimeline();
