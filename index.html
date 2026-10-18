@@ -3,22 +3,22 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-    <meta name="description" content="An interactive event timeline for a family journey through Central Europe." />
+    <meta name="description" content="An interactive event timeline for a group journey through Bali." />
     <meta name="theme-color" content="#102d34" />
-    <title>Central Europe · Family Journey</title>
+    <title>Bali · Group Journey</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <header class="site-header">
       <div class="header-inner">
-        <a class="brand" href="#top"><span class="brand-mark">✦</span><span><strong>Central Europe</strong><small>Family journey · 2026</small></span></a>
+        <a class="brand" href="#top"><span class="brand-mark">✦</span><span><strong>Bali</strong><small>Group journey · 2026</small></span></a>
         <nav aria-label="Primary navigation"><a href="#journey">Journey</a></nav>
       </div>
     </header>
     <main id="top">
       <section class="hero">
-        <div class="hero-image" role="img" aria-label="Mountain lake in Central Europe"></div><div class="hero-overlay"></div>
-        <div class="hero-content section-shell"><p class="eyebrow light">Switzerland · Austria · Hungary</p><h1>One journey.<br /><em>Seven remarkable stays.</em></h1><p>19 July — 03 August 2026 · 4 travelers</p><a class="button" href="#journey">Follow the route <span>↓</span></a></div>
+        <div class="hero-image" role="img" aria-label="Rice terraces and temples in Bali"></div><div class="hero-overlay"></div>
+        <div class="hero-content section-shell"><p class="eyebrow light">Ubud · Candi Dasa · Batu Bolong</p><h1>One island.<br /><em>Three remarkable stays.</em></h1><p>18 — 24 October 2026 · 7 travellers</p><a class="button" href="#journey">Follow the route <span>↓</span></a></div>
       </section>
       <section class="trip-dock section-shell" aria-labelledby="status-title">
         <div class="dock-main"><span class="pulse"></span><div><small id="todayLabel">Today</small><strong id="status-title">Your journey is loading</strong></div></div>
@@ -29,13 +29,13 @@
       <section class="journey-section section-shell" id="journey" aria-labelledby="journey-title">
         <div class="section-heading">
           <div><p class="eyebrow">Your route, in order</p><h2 id="journey-title">The journey</h2><p class="section-intro">Travel, stays and plans together—open only what you need.</p></div>
-          <div class="filters"><label class="search"><span>⌕</span><input id="searchInput" type="search" placeholder="Find a city, hotel or plan" /></label><label class="toggle"><input id="hidePast" type="checkbox" checked /><span></span>Remaining only</label></div>
+          <div class="filters"><label class="search"><span>⌕</span><input id="searchInput" type="search" placeholder="Find a place, villa or plan" /></label><label class="toggle"><input id="hidePast" type="checkbox" checked /><span></span>Remaining only</label></div>
         </div>
         <div id="timeline" class="timeline" aria-live="polite"></div><p id="emptyState" class="empty-state" hidden>No journey events match this view.</p>
       </section>
     </main>
-    <footer><div class="section-shell"><span>Made for the Gupta &amp; Aggarwal family</span><span>16 days · 3 countries · countless memories</span></div></footer>
-    <dialog id="cityDialog" class="city-dialog"><button class="dialog-close" type="button" aria-label="Close city guide">×</button><div id="dialogImage" class="dialog-image"></div><div class="dialog-content"><p id="dialogCountry" class="eyebrow"></p><h2 id="dialogTitle"></h2><p id="dialogDates" class="dialog-dates"></p><p id="dialogAbout" class="dialog-about"></p><div id="dialogFacts" class="dialog-facts"></div><div id="dialogHighlights" class="dialog-highlights"></div><section class="dialog-places"><div class="dialog-places-heading"><small>Near your hotel</small><p>Good first stops for local atmosphere, central streets and easy walks.</p></div><div id="dialogPlaces" class="places-list"></div></section><a id="dialogMap" class="button dark" target="_blank" rel="noopener">Open hotel in Google Maps ↗</a></div></dialog>
+    <footer><div class="section-shell"><span>Made for our Bali crew</span><span>7 days · 1 island · 3 stays · countless memories</span></div></footer>
+    <dialog id="cityDialog" class="city-dialog"><button class="dialog-close" type="button" aria-label="Close city guide">×</button><div id="dialogImage" class="dialog-image"></div><div class="dialog-content"><p id="dialogCountry" class="eyebrow"></p><h2 id="dialogTitle"></h2><p id="dialogDates" class="dialog-dates"></p><p id="dialogAbout" class="dialog-about"></p><div id="dialogFacts" class="dialog-facts"></div><div id="dialogHighlights" class="dialog-highlights"></div><section class="dialog-places"><div class="dialog-places-heading"><small>Near your stay</small><p>Good first stops for culture, nature and activities close to your villa.</p></div><div id="dialogPlaces" class="places-list"></div></section><a id="dialogMap" class="button dark" target="_blank" rel="noopener">Open stay in Google Maps ↗</a></div></dialog>
     <div id="toast" class="toast" role="status" aria-live="polite"></div><script src="app.js"></script>
   </body>
 </html>
