@@ -1,3 +1,35 @@
+const locations = {
+  jaipur: {
+    name: 'The County Inn · Vaishali Nagar',
+    address: '285, Vaishali Marg, Hanuman Nagar, Vaishali Nagar, Jaipur, Rajasthan 302021',
+    map: 'https://maps.app.goo.gl/Em7unSCTbvThjQBdA?g_st=ic',
+    routeQuery: 'The County Inn, 285 Vaishali Marg, Vaishali Nagar, Jaipur, Rajasthan 302021'
+  },
+  bharatpur: {
+    name: 'Club Mahindra Bharatpur',
+    address: '3CV5+RXG, Uchain, Uchchain, Rajasthan 321302',
+    map: 'https://maps.app.goo.gl/ePXHBLRifHKAMJ199?g_st=ic',
+    routeQuery: '3CV5+RXG Club Mahindra bharatpur, Uchain, Uchchain, Rajasthan 321302'
+  },
+  ranthambore: {
+    name: 'Maa Ashapura Farm Stay',
+    address: 'Ranthambhore Road, Kutalpura Maliyan, Sherpur, Rajasthan 322001',
+    map: 'https://maps.app.goo.gl/Nxu2yCU94gQg5V9j8?g_st=ic',
+    routeQuery: 'Maa Ashapura Farm Stay, Ranthambhore Road, Kutalpura Maliyan, Sherpur, Rajasthan 322001'
+  },
+  jaipurHome: {
+    name: 'Jaipur home',
+    address: '26.9133115, 75.7477555',
+    map: 'https://maps.app.goo.gl/dZgqQAceR4SWJbwn6?g_st=ic'
+  }
+};
+
+const drivingDirections = (origin, destination) => {
+  const params = new URLSearchParams({ api: '1', origin: origin.routeQuery, destination: destination.routeQuery, travelmode: 'driving' });
+  return `https://www.google.com/maps/dir/?${params}`;
+};
+const carIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M5 11l1.5-4h11L19 11M4 11h16v6H4zM7 17v2m10-2v2M7 14h.01M17 14h.01"/></svg>';
+
 const events = [
   {
     type: 'flight',
@@ -31,28 +63,10 @@ const events = [
       ['Airline', 'Air India · AI 2635'],
       ['Departure', 'Mumbai · 13 Nov at 16:20'],
       ['Arrival', 'Jaipur International Airport (JAI) · 18:10'],
-      ['Transfer', 'Pre-arrange a car to your Jaipur accommodation'],
       ['Stay', 'Jaipur · 13–18 Nov'],
       ['Note', 'Allow for baggage collection and the domestic connection']
     ],
     map: 'https://www.google.com/maps/search/?api=1&query=Jaipur+International+Airport'
-  },
-  {
-    type: 'transfer',
-    start: '2026-11-13',
-    end: '2026-11-13',
-    icon: '🚗',
-    label: 'Private transfer',
-    title: 'Jaipur Airport → Jaipur stay',
-    meta: '13 Nov · ~30–45 min',
-    summary: 'Traffic varies by hotel location and evening congestion',
-    details: [
-      ['Pickup', 'Jaipur International Airport (JAI)'],
-      ['Arrive', 'Your Jaipur accommodation · address TBC'],
-      ['Distance', 'Usually 12–15 km to the Pink City'],
-      ['Tip', 'Keep the first evening light after the long flight']
-    ],
-    map: 'https://www.google.com/maps/dir/?api=1&origin=Jaipur+International+Airport&destination=Hawa+Mahal+Jaipur&travelmode=driving'
   },
   {
     type: 'stay',
@@ -63,9 +77,10 @@ const events = [
     country: 'Rajasthan, India',
     title: 'Jaipur',
     meta: '13–18 Nov · 5 nights',
-    hotel: 'Jaipur accommodation · details TBC',
-    room: 'Five-night base for a set of area-based day plans. Hotel address, booking reference and check-in details are still to be added.',
-    address: 'Jaipur, Rajasthan · accommodation address TBC',
+    hotel: locations.jaipur.name,
+    room: 'Five-night base for exploring Jaipur. Booking reference and check-in details are still to be added.',
+    address: locations.jaipur.address,
+    home: locations.jaipurHome,
     image: 'https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=1200&q=85',
     about: 'The Pink City combines royal forts, palace courtyards, colourful bazaars and modern cafés. Grouping each day by area keeps driving efficient and leaves time to explore on foot.',
     facts: ['Language · Hindi / English', 'Currency · INR', 'November · warm days, cool evenings'],
@@ -80,30 +95,30 @@ const events = [
       { name: 'Nahargarh Fort', type: 'Aravalli hills', note: 'Best kept for late afternoon views over the city; allow extra road time.', mapQuery: 'Nahargarh Fort Jaipur' }
     ],
     plans: [
-      ['13 Nov', 'Arrive at Jaipur at 18:10, transfer to the hotel and rest'],
+      ['13 Nov', 'Arrive at Jaipur at 18:10, head to the hotel and rest'],
       ['14 Nov · Old City', 'Hawa Mahal early, City Palace, Jantar Mantar, Johari Bazaar and Bapu Bazaar. Sites are clustered within the Pink City; walk between nearby stops.'],
       ['15 Nov · Amer', 'Amber Fort early, Jaigarh Fort, Panna Meena ka Kund and Jal Mahal photo stop. Allow ~30–45 min each way from central Jaipur, plus 15 min between the forts.'],
       ['16 Nov · Central & southern Jaipur', 'Albert Hall Museum, Ram Niwas Garden, Birla Mandir and relaxed shopping around MI Road. Allow ~15–30 min between areas by car.'],
       ['17 Nov · Hills & markets', 'Nahargarh Fort for city views, Gaitore cenotaphs, then a flexible afternoon for cafés, textiles or a return to the Pink City. Allow ~30–45 min up to Nahargarh.']
     ],
-    map: 'https://www.google.com/maps/search/?api=1&query=Jaipur+Rajasthan+India'
+    map: locations.jaipur.map
   },
   {
     type: 'transfer',
     start: '2026-11-18',
     end: '2026-11-18',
-    icon: '🚗',
-    label: 'Private driver',
+    icon: carIcon,
+    label: 'Personal drive',
     title: 'Jaipur → Bharatpur',
     meta: '18 Nov · ~2h 30m–3h',
-    summary: 'Approximately 185 km; allow longer for traffic and stops',
+    summary: 'Allow extra time for traffic and stops',
     details: [
-      ['Leave', 'Jaipur after breakfast'],
+      ['Leave', 'The County Inn, Jaipur after breakfast'],
       ['Arrive', 'Club Mahindra Bharatpur'],
-      ['Route', 'Approximately 185 km by road'],
+      ['Route', 'Check the driving directions before setting off'],
       ['Tip', 'Leave early enough to settle in and visit the sanctuary later']
     ],
-    map: 'https://www.google.com/maps/dir/?api=1&origin=Jaipur&destination=Club+Mahindra+Bharatpur&travelmode=driving'
+    map: drivingDirections(locations.jaipur, locations.bharatpur)
   },
   {
     type: 'stay',
@@ -114,10 +129,11 @@ const events = [
     country: 'Rajasthan, India',
     title: 'Bharatpur',
     meta: '18–20 Nov · 2 nights',
-    hotel: 'Club Mahindra Bharatpur',
+    hotel: locations.bharatpur.name,
     room: 'Club Mahindra resort · booking and room details TBC',
-    address: '[Pakka Bagh, Achnera Road, Bharatpur, Rajasthan 321001](https://www.google.com/maps/search/?api=1&query=Club+Mahindra+Bharatpur+Pakka+Bagh+Achnera+Road)',
-    image: 'https://images.unsplash.com/photo-1516690561799-46d8f74f9abf?auto=format&fit=crop&w=1200&q=85',
+    address: locations.bharatpur.address,
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/002_Asian_green_bee-eaters_in_Keoladeo_National_Park_Photo_by_Giles_Laurent.jpg/1280px-002_Asian_green_bee-eaters_in_Keoladeo_National_Park_Photo_by_Giles_Laurent.jpg',
+    imageCredit: 'https://commons.wikimedia.org/wiki/File:002_Asian_green_bee-eaters_in_Keoladeo_National_Park_Photo_by_Giles_Laurent.jpg',
     about: 'Bharatpur is the gateway to Keoladeo National Park, one of India’s best birding landscapes. November is a strong month for migratory birds, so early starts are worthwhile.',
     facts: ['Language · Hindi / English', 'Currency · INR', 'Keoladeo · roughly 7:00–17:30 in November'],
     highlights: ['Bird sanctuary', 'Agra', 'Fatehpur Sikri', 'Wetlands'],
@@ -130,26 +146,26 @@ const events = [
     plans: [
       ['18 Nov', 'Drive from Jaipur, check in, then a relaxed late-afternoon orientation at Keoladeo if energy and light allow.'],
       ['19 Nov · Agra loop', 'Early Keoladeo birding, then Bharatpur → Fatehpur Sikri (~45 min), Fatehpur Sikri → Agra (~1h), Taj Mahal visit, and return to Bharatpur (~1h 30m–2h). This is a full, demanding day; confirm Taj opening day and entry in advance.'],
-      ['20 Nov', 'Breakfast and check out. Bharatpur → Ranthambore is approximately 210–220 km and usually 4½–5½ hours by car.']
+      ['20 Nov', 'Breakfast and check out, then drive to Ranthambore. Allow time for a comfort stop.']
     ],
-    map: 'https://www.google.com/maps/search/?api=1&query=Club+Mahindra+Bharatpur+Pakka+Bagh+Achnera+Road'
+    map: locations.bharatpur.map
   },
   {
     type: 'transfer',
     start: '2026-11-20',
     end: '2026-11-20',
-    icon: '🚗',
-    label: 'Private driver',
+    icon: carIcon,
+    label: 'Personal drive',
     title: 'Bharatpur → Ranthambore',
     meta: '20 Nov · ~4½–5½h',
-    summary: 'Approximately 210–220 km; resort details pending',
+    summary: 'Allow time for stops along the way',
     details: [
       ['Leave', 'Club Mahindra Bharatpur after breakfast'],
-      ['Arrive', 'Ranthambore resort · details TBC'],
+      ['Arrive', 'Maa Ashapura Farm Stay'],
       ['Route', 'Allow a comfort stop and daylight buffer'],
-      ['Tip', 'Do not schedule a tight evening safari until the resort and safari zone are confirmed']
+      ['Tip', 'Do not schedule a tight evening safari until the safari zone is confirmed']
     ],
-    map: 'https://www.google.com/maps/dir/?api=1&origin=Club+Mahindra+Bharatpur&destination=Ranthambore+National+Park&travelmode=driving'
+    map: drivingDirections(locations.bharatpur, locations.ranthambore)
   },
   {
     type: 'stay',
@@ -160,9 +176,9 @@ const events = [
     country: 'Rajasthan, India',
     title: 'Ranthambore',
     meta: '20–24 Nov · 4 nights',
-    hotel: 'Ranthambore resort · details TBC',
-    room: 'Resort name, address, booking reference and room details to be added.',
-    address: 'Ranthambore / Sawai Madhopur · resort address TBC',
+    hotel: locations.ranthambore.name,
+    room: 'Booking reference and room details to be added.',
+    address: locations.ranthambore.address,
     image: 'https://images.unsplash.com/photo-1549366021-9f761d450615?auto=format&fit=crop&w=1200&q=85',
     about: 'A wildlife-focused finish to the journey, with tiger-reserve safaris and a possible Chambal river excursion. Safari timings and availability should be confirmed before finalising the day plan.',
     facts: ['Language · Hindi / English', 'Currency · INR', 'Safaris · book official slots early'],
@@ -180,19 +196,9 @@ const events = [
       ['23 Nov', 'Second dedicated Ranthambore safari day, with a morning or afternoon slot and a flexible reserve/fort visit.'],
       ['24 Nov', 'Final breakfast and departure arrangements TBC. Add the outbound flight or onward transfer when confirmed.']
     ],
-    map: 'https://www.google.com/maps/search/?api=1&query=Ranthambore+National+Park'
+    map: locations.ranthambore.map
   }
 ];
-
-const hotelMetadata = {
-  'Jaipur accommodation · details TBC': ['TBC', 'https://www.google.com/maps'],
-  'Club Mahindra Bharatpur': ['TBC', 'https://www.clubmahindra.com/'],
-  'Ranthambore resort · details TBC': ['TBC', 'https://www.google.com/maps']
-};
-
-events.filter(event => event.type === 'stay').forEach(event => {
-  [event.confirmation, event.logo] = hotelMetadata[event.hotel];
-});
 
 const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const dateOf = value => {
@@ -205,8 +211,7 @@ const today = () => {
   return value;
 };
 const eventStatus = (event, now) => dateOf(event.end) < now ? 'complete' : dateOf(event.start) <= now && dateOf(event.end) >= now ? 'current' : 'upcoming';
-const mapLink = url => `<a class="map-link" href="${url}" target="_blank" rel="noopener">Open in Google Maps <span>↗</span></a>`;
-const parseMarkdownLinks = text => text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener" class="inline-map-link">$1</a>');
+const mapLink = (url, label = 'Open in Google Maps') => `<a class="map-link" href="${url}" target="_blank" rel="noopener">${label} <span>↗</span></a>`;
 const formatShortDate = value => {
   const date = dateOf(value);
   return `${String(date.getDate()).padStart(2, '0')} ${monthNames[date.getMonth()]}`;
@@ -215,14 +220,11 @@ const formatDateRange = (start, end) => start === end ? formatShortDate(start) :
 const placeMapLink = query => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
 
 function travelCard(event, status) {
-  return `<details class="timeline-event travel-event ${status}"><summary><span class="event-logo ${event.type}">${event.icon}</span><span class="summary-copy"><small>${event.label}</small><strong>${event.title}</strong><span class="summary-dates">${formatDateRange(event.start, event.end)}</span><span>${event.meta} · ${event.summary}</span></span><span class="chevron">⌄</span></summary><div class="travel-details">${event.details.map(([label, value]) => `<div><small>${label}</small><strong>${value}</strong></div>`).join('')}</div><div class="event-actions">${mapLink(event.map)}</div></details>`;
+  return `<details class="timeline-event travel-event ${status}"><summary><span class="event-logo ${event.type}">${event.icon}</span><span class="summary-copy"><small>${event.label}</small><strong>${event.title}</strong><span class="summary-dates">${formatDateRange(event.start, event.end)}</span><span>${event.meta} · ${event.summary}</span></span><span class="chevron">⌄</span></summary><div class="travel-details">${event.details.map(([label, value]) => `<div><small>${label}</small><strong>${value}</strong></div>`).join('')}</div><div class="event-actions">${mapLink(event.map, event.type === 'transfer' ? 'Open driving directions' : 'Open airport map')}</div></details>`;
 }
 
 function stayCard(event, status, index) {
-  const logoDomain = (event.logo.match(/\[([^\]]+)\]/)?.[1] || event.logo).replace(/^https?:\/\//, '');
-  const logo = `https://www.google.com/s2/favicons?domain=${logoDomain}&sz=128`;
-  const formattedAddress = parseMarkdownLinks(event.address);
-  return `<article class="timeline-event city-event ${status}"><button class="city-visual" data-city="${index}" style="background-image:linear-gradient(90deg,rgba(8,31,38,.76),rgba(8,31,38,.08)),url('${event.image}')" aria-label="Open ${event.city} city guide"><span><small>${event.country}</small><strong>${event.city}</strong><em>Discover the city ↗</em></span></button><div class="city-body"><div class="stay-meta"><span class="stay-chip">Hotel stay</span><strong>${formatDateRange(event.start, event.end)}</strong><span>${event.meta}</span></div><details class="hotel-details"><summary class="stay-header"><span class="hotel-logo"><img src="${logo}" alt="" /></span><span class="hotel-summary"><small>${event.city} · Booking ${event.confirmation}</small><strong>${event.hotel}</strong><span class="address-container">⌖ ${formattedAddress}</span></span><span class="chevron">⌄</span></summary><div class="hotel-expanded"><p>${event.room}</p><div class="plan-list">${event.plans.map(([date, plan]) => `<div><time>${date}</time><span>${plan}</span></div>`).join('')}</div><div class="city-footer"><span>Check-in 14:00 · Checkout 12:00</span>${mapLink(event.map)}</div></div></details></div></article>`;
+  return `<article class="timeline-event city-event ${status}"><button class="city-visual" data-city="${index}" style="background-image:linear-gradient(90deg,rgba(8,31,38,.76),rgba(8,31,38,.08)),url('${event.image}')" aria-label="Open ${event.city} city guide"><span><small>${event.country}</small><strong>${event.city}</strong><em>Discover the city ↗</em></span></button><div class="city-body"><div class="stay-meta"><span class="stay-chip">Stay</span><strong>${event.meta}</strong></div><div class="hotel-summary"><small>${event.city} · Accommodation</small><strong>${event.hotel}</strong><span class="address-container">${event.address}</span>${mapLink(event.map, 'Open stay location')}</div>${event.home ? `<div class="home-address"><small>Home address</small><strong>${event.home.name}</strong><span>${event.home.address}</span>${mapLink(event.home.map, 'Open home location')}</div>` : ''}<details class="hotel-details"><summary class="stay-header">View stay details & daily plans <span class="chevron">⌄</span></summary><div class="hotel-expanded"><p>${event.room}</p><div class="plan-list">${event.plans.map(([date, plan]) => `<div><time>${date}</time><span>${plan}</span></div>`).join('')}</div></div></details>${event.imageCredit ? `<p class="image-credit">Photo: <a href="${event.imageCredit}" target="_blank" rel="noopener">Giles Laurent / Wikimedia Commons</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a></p>` : ''}</div></article>`;
 }
 
 function renderTimeline() {
@@ -232,7 +234,7 @@ function renderTimeline() {
   let shown = 0;
   document.querySelector('#timeline').innerHTML = events.map((event, index) => {
     const status = eventStatus(event, now);
-    const searchable = `${event.type} ${event.title} ${event.hotel || ''} ${event.summary || ''} ${(event.plans || []).flat().join(' ')} ${(event.nearby || []).map(place => `${place.name} ${place.note}`).join(' ')}`.toLowerCase();
+    const searchable = `${event.type} ${event.label || ''} ${event.title} ${event.hotel || ''} ${event.address || ''} ${event.home?.name || ''} ${event.summary || ''} ${(event.plans || []).flat().join(' ')} ${(event.nearby || []).map(place => `${place.name} ${place.note}`).join(' ')}`.toLowerCase();
     const hidden = (hidePast && status === 'complete') || (query && !searchable.includes(query));
     if (!hidden) shown++;
     return `<div class="timeline-row ${status}" ${hidden ? 'hidden' : ''}>${event.type === 'stay' ? stayCard(event, status, index) : travelCard(event, status)}</div>`;
