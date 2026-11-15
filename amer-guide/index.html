@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <meta name="description" content="A self-guided audio-style tour of Amer (Amber) Fort, Jaipur: 14 checkpoints from the lake to the Mirror Palace, with stories, tips and an AI guide." />
+    <meta name="theme-color" content="#2a1d17" />
+    <title>Amer Fort · Self-Guided Tour</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar" id="topbar">
+      <a class="brand" href="#top"><span class="brand-mark">✦</span><span><strong>Amer Fort</strong><small>Self-guided tour</small></span></a>
+      <div class="topbar-right">
+        <div class="progress-pill" aria-live="polite"><span id="visitedCount">0</span>/<span id="totalCount">14</span> visited<i><b id="topProgress"></b></i></div>
+        <button class="icon-btn" id="settingsBtn" type="button" aria-label="Guide settings">⚙</button>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="hero-img" role="img" aria-label="Amer Fort reflected in Maota Lake"></div>
+        <div class="hero-shade"></div>
+        <div class="hero-inner">
+          <p class="eyebrow">Jaipur · Rajasthan · UNESCO World Heritage</p>
+          <h1>Walk Amer Fort<br /><em>like a Maharaja.</em></h1>
+          <p class="lead">Fourteen checkpoints, from the lakeshore to the Mirror Palace. Scroll the route, tap a stop to turn its card, and hear the story of the place you’re standing in.</p>
+          <div class="hero-stats">
+            <span><b>14</b> stops</span><span><b>≈ 2.5 hrs</b> at an easy pace</span><span><b>1599</b> oldest palace</span>
+          </div>
+          <a class="cta" href="#route">Begin the walk <span>↓</span></a>
+        </div>
+      </section>
+
+      <section class="shell prep" aria-labelledby="prepTitle">
+        <div class="section-head"><p class="eyebrow dark">Before you go</p><h2 id="prepTitle">Plan your visit</h2></div>
+        <div class="prep-grid" id="prepGrid"></div>
+      </section>
+
+      <section class="shell route-wrap" aria-labelledby="routeTitle">
+        <div class="section-head center">
+          <p class="eyebrow dark">Your route, in order</p>
+          <h2 id="routeTitle">The journey through the fort</h2>
+          <p class="sub">Follow the dotted path from top to bottom. Each stop is a card: tap it to flip it open.</p>
+        </div>
+        <ol class="route" id="route"></ol>
+        <div class="finish" id="finish">
+          <div class="finish-medal">🏰</div>
+          <h3>You’ve walked the whole fort.</h3>
+          <p>From the lakeshore to the Mirror Palace, you’ve followed the footsteps of the Kachwaha kings. Jai Jaipur!</p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="shell foot">
+        <p>Historical details are compiled from public sources including Wikipedia and UNESCO. Timings, tickets and access change, so please confirm on site.</p>
+        <p class="credit">Photos: <a href="https://commons.wikimedia.org/wiki/User:Jakubhal" target="_blank" rel="noopener">Jakub Hałun</a> via Wikimedia Commons, <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>. · <a href="../">Back to the Rajasthan trip</a></p>
+      </div>
+    </footer>
+
+    <button class="upnext" id="upNext" type="button" hidden><small>Up next</small><strong id="upNextTitle"></strong><span>→</span></button>
+
+    <div class="stage" id="stage" hidden>
+      <div class="stage-backdrop" id="stageBackdrop"></div>
+      <div class="card3d" id="card3d" role="dialog" aria-modal="true" aria-labelledby="gTitle">
+        <button class="close-btn" id="closeBtn" type="button" aria-label="Close and return to the route">×</button>
+        <div class="card3d-inner">
+          <div class="face front" id="front">
+            <div class="front-img" id="frontImg"></div>
+            <div class="front-shade"></div>
+            <div class="front-copy"><span class="front-num" id="frontNum"></span><small id="frontZone"></small><strong id="frontTitle"></strong></div>
+          </div>
+          <div class="face back" id="back">
+            <div class="back-hero" id="backHero">
+              <div class="back-hero-copy"><small id="gZone"></small><h3 id="gTitle"></h3><p id="gSub"></p></div>
+            </div>
+            <div class="back-scroll" id="backScroll">
+              <div class="meta-row"><span id="gTime"></span><a id="gMap" target="_blank" rel="noopener">Open in Maps ↗</a></div>
+              <div class="story" id="gStory"></div>
+              <section class="block look"><h4>👀 Look closely</h4><ul id="gLook"></ul></section>
+              <section class="block facts"><h4>✨ Did you know?</h4><ul id="gFacts"></ul></section>
+              <section class="block tip"><h4>💡 Guide’s tip</h4><p id="gTip"></p></section>
+              <section class="block ask" id="askBlock">
+                <h4>💬 Ask your guide about <span id="askName"></span></h4>
+                <div class="chips" id="chips"></div>
+                <div class="chat" id="chat" aria-live="polite"></div>
+                <form class="ask-form" id="askForm">
+                  <input id="askInput" type="text" autocomplete="off" maxlength="400" placeholder="Ask about this spot…" aria-label="Your question" />
+                  <button type="submit" id="askSend">Ask</button>
+                </form>
+                <p class="ask-note" id="askNote"></p>
+              </section>
+              <section class="block next"><h4>🧭 Where next?</h4><p id="gNext"></p></section>
+            </div>
+            <div class="back-nav">
+              <button type="button" id="prevBtn" class="nav-btn">← <span id="prevLabel">Previous</span></button>
+              <button type="button" id="nextBtn" class="nav-btn primary"><span id="nextLabel">Next stop</span> →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <dialog class="settings" id="settings">
+      <form method="dialog" class="settings-body" id="settingsForm">
+        <h3>AI guide settings</h3>
+        <p>The “Ask your guide” feature calls the Gemini API directly from your browser. Paste a key from <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Google AI Studio</a>. It is stored only in this browser (localStorage) and is sent only to Google.</p>
+        <label>Gemini API key<input type="password" id="keyInput" autocomplete="off" placeholder="Paste your key" /></label>
+        <p class="models-note">Models are tried in this order if one is rate-limited or unavailable:<br /><span id="modelOrder"></span></p>
+        <div class="settings-actions">
+          <button type="button" id="keyClear" class="nav-btn">Remove key</button>
+          <button type="button" id="keySave" class="nav-btn primary">Save</button>
+          <button value="cancel" class="nav-btn">Close</button>
+        </div>
+      </form>
+    </dialog>
+
+    <script src="data.js"></script>
+    <script src="gemini.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
