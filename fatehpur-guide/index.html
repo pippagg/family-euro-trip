@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <meta name="description" content="A self-guided visual tour of Fatehpur Sikri, Akbar’s lost capital near Agra: 16 checkpoints, photo galleries that show you what to look for, stories and an AI guide." />
+    <meta name="theme-color" content="#2a1d17" />
+    <title>Fatehpur Sikri · Self-Guided Visual Tour</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar" id="topbar">
+      <a class="brand" href="#top"><span class="brand-mark">✦</span><span><strong>Fatehpur Sikri</strong><small>Self-guided tour</small></span></a>
+      <div class="topbar-right">
+        <div class="progress-pill" aria-live="polite"><span id="visitedCount">0</span>/<span id="totalCount">14</span> visited<i><b id="topProgress"></b></i></div>
+        <button class="icon-btn" id="settingsBtn" type="button" aria-label="Guide settings">⚙</button>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="hero-img" role="img" aria-label="The five-storey Panch Mahal at Fatehpur Sikri"></div>
+        <div class="hero-shade"></div>
+        <div class="hero-inner">
+          <p class="eyebrow">Agra · Uttar Pradesh · UNESCO World Heritage</p>
+          <h1>Walk Akbar’s city<br /><em>learn to really look.</em></h1>
+          <p class="lead">Sixteen checkpoints through the sandstone capital Akbar built and left. Each stop is a photo gallery that shows you exactly what to spot, and the story of why it matters.</p>
+          <div class="hero-stats">
+            <span><b>16</b> stops</span><span><b>≈ 3 hrs</b> at an easy pace</span><span><b>1571</b> city founded</span>
+          </div>
+          <a class="cta" href="#route">Begin the walk <span>↓</span></a>
+        </div>
+      </section>
+
+      <section class="shell prep" aria-labelledby="prepTitle">
+        <div class="section-head"><p class="eyebrow dark">Before you go</p><h2 id="prepTitle">Plan your visit</h2></div>
+        <div class="prep-grid" id="prepGrid"></div>
+      </section>
+
+      <section class="shell route-wrap" aria-labelledby="routeTitle">
+        <div class="section-head center">
+          <p class="eyebrow dark">Your route, in order</p>
+          <h2 id="routeTitle">The journey through the city</h2>
+          <p class="sub">Follow the dotted path from top to bottom. Each stop is a card: tap it to flip it open and open its “Spot it” gallery.</p>
+        </div>
+        <ol class="route" id="route"></ol>
+        <div class="finish" id="finish">
+          <div class="finish-medal">🕌</div>
+          <h3>You’ve walked the whole city.</h3>
+          <p>From the Hall of Public Audience to the Door of Victory, you’ve followed Akbar’s footsteps through the capital he built on a saint’s blessing.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="shell foot">
+        <p>Historical details are compiled from public sources including Wikipedia, Wikivoyage and the Archaeological Survey of India’s on-site plaques. Some stories are traditions rather than proven history, and we say so where we know it. Timings, tickets and access change, so please confirm on site.</p>
+        <details class="credits"><summary>Photo credits (Wikimedia Commons, open licences)</summary><ul id="creditList"></ul></details>
+        <p class="credit"><a href="../amer-guide/">Amer Fort guide</a> · <a href="../">Back to the Rajasthan trip</a></p>
+      </div>
+    </footer>
+
+    <button class="upnext" id="upNext" type="button" hidden><small>Up next</small><strong id="upNextTitle"></strong><span>→</span></button>
+
+    <div class="stage" id="stage" hidden>
+      <div class="stage-backdrop" id="stageBackdrop"></div>
+      <div class="card3d" id="card3d" role="dialog" aria-modal="true" aria-labelledby="gTitle">
+        <button class="close-btn" id="closeBtn" type="button" aria-label="Close and return to the route">×</button>
+        <div class="card3d-inner">
+          <div class="face front" id="front">
+            <div class="front-img" id="frontImg"></div>
+            <div class="front-shade"></div>
+            <div class="front-copy"><span class="front-num" id="frontNum"></span><small id="frontZone"></small><strong id="frontTitle"></strong></div>
+          </div>
+          <div class="face back" id="back">
+            <div class="back-hero" id="backHero">
+              <div class="back-hero-copy"><small id="gZone"></small><h3 id="gTitle"></h3><p id="gSub"></p></div>
+            </div>
+            <div class="back-scroll" id="backScroll">
+              <div class="meta-row"><span id="gTime"></span><a id="gMap" target="_blank" rel="noopener">Open in Maps ↗</a></div>
+              <div class="story" id="gStory"></div>
+              <section class="spot" id="spot" aria-labelledby="spotTitle">
+                <h4 id="spotTitle">🔎 Spot it <span>a visual gallery</span></h4>
+                <p class="spot-hint">Tap a numbered pin, or swipe the lenses. Each one shows what to look for and why it matters.</p>
+                <figure class="lead" id="lead"><img id="leadImg" alt="" /><div class="pins" id="pins"></div></figure>
+                <div class="lenses" id="lenses" tabindex="0" aria-label="Things to spot at this stop"></div>
+                <div class="dots" id="dots"></div>
+              </section>
+              <section class="block facts"><h4>✨ Did you know?</h4><ul id="gFacts"></ul></section>
+              <section class="block tip"><h4>💡 Guide’s tip</h4><p id="gTip"></p></section>
+              <section class="block ask" id="askBlock">
+                <h4>💬 Ask your guide about <span id="askName"></span></h4>
+                <div class="chips" id="chips"></div>
+                <div class="chat" id="chat" aria-live="polite"></div>
+                <form class="ask-form" id="askForm">
+                  <input id="askInput" type="text" autocomplete="off" maxlength="400" placeholder="Ask about this spot…" aria-label="Your question" />
+                  <button type="submit" id="askSend">Ask</button>
+                </form>
+                <p class="ask-note" id="askNote"></p>
+              </section>
+              <section class="block next"><h4>🧭 Where next?</h4><p id="gNext"></p></section>
+            </div>
+            <div class="back-nav">
+              <button type="button" id="prevBtn" class="nav-btn">← <span id="prevLabel">Previous</span></button>
+              <button type="button" id="nextBtn" class="nav-btn primary"><span id="nextLabel">Next stop</span> →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lightbox" id="lightbox" hidden>
+      <button type="button" class="lb-close" id="lbClose" aria-label="Close photo">×</button>
+      <figure><div class="lb-frame" id="lbFrame"><img id="lbImg" alt="" /><span class="lb-ring" id="lbRing" hidden></span></div><figcaption id="lbCap"></figcaption></figure>
+    </div>
+
+    <dialog class="settings" id="settings">
+      <form method="dialog" class="settings-body" id="settingsForm">
+        <h3>AI guide settings</h3>
+        <p>The “Ask your guide” feature calls the Gemini API directly from your browser. Paste a key from <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Google AI Studio</a>. It is stored only in this browser (localStorage) and is sent only to Google.</p>
+        <label>Gemini API key<input type="password" id="keyInput" autocomplete="off" placeholder="Paste your key" /></label>
+        <p class="models-note">Models are tried in this order if one is rate-limited or unavailable:<br /><span id="modelOrder"></span></p>
+        <div class="settings-actions">
+          <button type="button" id="keyClear" class="nav-btn">Remove key</button>
+          <button type="button" id="keySave" class="nav-btn primary">Save</button>
+          <button value="cancel" class="nav-btn">Close</button>
+        </div>
+      </form>
+    </dialog>
+
+    <script src="credits.js"></script>
+    <script src="data.js"></script>
+    <script src="gemini.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
