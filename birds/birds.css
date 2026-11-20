@@ -89,3 +89,30 @@ h1,h2{margin:0;line-height:1.1;letter-spacing:-.03em}
 .conf .bar{flex:1;height:8px;background:#e3e8e4;border-radius:4px;overflow:hidden}.conf .bar i{display:block;height:100%;background:var(--teal)}
 .note{font-size:11px;color:var(--muted);margin-top:4px}
 footer.bfoot{padding:24px 0 40px;color:var(--muted);font-size:12px;text-align:center}
+/* selection + saved lists */
+.bwrap{position:relative}
+.pick{position:absolute;top:8px;left:8px;z-index:2;width:32px;height:32px;display:grid;place-items:center;border-radius:50%;border:2px solid #fff;background:rgba(16,45,52,.6);color:#fff;font-size:18px;line-height:1;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.pick[aria-pressed=true]{background:var(--teal)}
+.bwrap.sel .bcard{box-shadow:0 0 0 2px var(--teal);border-color:var(--teal)}
+.picks{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:10px max(14px,calc((100% - 1100px)/2));background:var(--ink);color:#fff;box-shadow:0 -6px 24px rgba(16,45,52,.25)}
+.picks[hidden]{display:none}
+body.has-picks{padding-bottom:84px}
+.picks #pickCount{font-weight:700;margin-right:auto}
+.saveform{display:flex;gap:8px;flex:1 1 260px;max-width:460px}
+.saveform input{flex:1;min-width:0;padding:8px 12px;border:0;border-radius:8px;font-size:14px}
+.picks .btn{background:var(--gold);color:var(--ink);border:0}
+.picks .btn.alt{background:transparent;color:#fff;border:1px solid #5b7a7e}
+.picks .btn:disabled{opacity:.6;cursor:default}
+.picks .msg{flex-basis:100%;margin:0;font-size:13px;color:#dce7e4}
+.picks .msg.err{color:#ffb4a8;font-weight:700}
+.picks .msg a{color:var(--gold);text-decoration:underline}
+.lhead{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px 20px;margin:18px 0 14px}
+.lhead h1{font-size:clamp(26px,5vw,40px)}
+.lactions{display:flex;gap:8px}
+.btn.danger{background:#b3261e}
+.lists{padding-bottom:40px}
+.lcard{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 16px;margin-bottom:10px;background:#fff;border:1px solid var(--line);border-radius:10px}
+.lcard:hover{box-shadow:var(--shadow)}
+.lcard strong{display:block}
+.lcard small{color:var(--muted);font-size:13px}
+.lcard .arrow{color:var(--teal);font-size:22px}

@@ -56,8 +56,31 @@
       h('nav', {},
         h('a', { href: './', 'aria-current': active === 'list' ? 'page' : null, text: 'Checklist' }),
         h('a', { href: 'identify.html', 'aria-current': active === 'identify' ? 'page' : null, text: '🎙 Identify by sound' }),
+        h('a', { href: 'lists.html', 'aria-current': active === 'lists' ? 'page' : null, text: 'Saved lists' }),
         h('a', { href: '../', text: 'Trip ↗' })));
   }
 
-  window.Birds = { IUCN, THREATENED, PLACEHOLDER, h, loadSpecies, norm, thumb, isRare, safeUrl, iucnCode, statusBadge, headerHTML };
+  // Fetch JSON from the bird API. Throws Error (with .status for HTTP errors) and returns null for 204.
+  async function api(path, opts) {
+    const base = String((window.BIRDS_CONFIG || {}).API_BASE || '').replace(/\/+$/, '');
+    let r;
+    try { r = await fetch(base + path, opts); } catch (e) {
+      throw new Error('Could not reach the bird API. Check your connection and try again.');
+    }
+    if (r.status === 204) return null;
+    const data = await r.json().catch(() => ({}));
+    if (!r.ok) throw Object.assign(new Error(data.detail || `Request failed (${r.status})`), { status: r.status });
+    return data;
+  }
+
+  // One bird card for any grid: { href, common, scientific, family, thumb (image URL or null), iucn (code or null) }.
+  function birdCard({ href, common, scientific, family, thumb: src, iucn }) {
+    const img = h('img', { src: src || PLACEHOLDER, alt: src ? common || '' : '', loading: 'lazy', decoding: 'async', width: 400, height: 300, class: src ? null : 'noph' });
+    img.addEventListener('error', () => { img.src = PLACEHOLDER; img.classList.add('noph'); }, { once: true });
+    return h('a', { class: 'bcard', href },
+      h('div', { class: 'ph' }, img, THREATENED.includes(iucn) ? statusBadge(iucn) : null),
+      h('div', { class: 'txt' }, h('strong', { text: common || scientific }), h('span', { class: 'sci', text: scientific || '' }), h('span', { class: 'fam', text: family || '' })));
+  }
+
+  window.Birds = { IUCN, THREATENED, PLACEHOLDER, h, loadSpecies, norm, thumb, isRare, safeUrl, iucnCode, statusBadge, headerHTML, api, birdCard };
 })();

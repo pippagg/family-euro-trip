@@ -31,6 +31,15 @@
   <div class="grid" id="grid"></div>
   <p class="empty" id="empty" hidden>No birds match. Try fewer filters.</p>
 </main>
+<section class="picks" id="picks" hidden aria-label="Selected birds">
+  <span id="pickCount">0 selected</span>
+  <form id="saveForm" class="saveform" autocomplete="off">
+    <input id="listName" type="text" maxlength="80" placeholder="Name this list" aria-label="List name" />
+    <button class="btn" type="submit" id="saveBtn">Save list</button>
+  </form>
+  <button class="btn alt" type="button" id="clearPicks">Clear</button>
+  <p class="msg" id="pickMsg" role="status" aria-live="polite"></p>
+</section>
 <footer class="bfoot">Photos and data: Wikimedia Commons, eBird, IUCN. See each bird page for credits.</footer>
 <script src="config.js"></script>
 <script src="common.js"></script>

@@ -7,6 +7,11 @@ species is claimed by only its best-ranked label). `data/ebird_taxonomy.json` is
 `[scientific, common, ebird_code]` used for eBird-based matching; if missing or invalid, matching falls back to names only.
 `.venv/bin/python audit_matching.py` prints match counts by method, collisions, and unmatched checklist species.
 
+Saved bird lists: `POST /lists` `{"name": str (1-80), "bird_ids": [str] (1-460, must exist in species.json)}` → 201;
+`GET /lists` (newest first, summaries); `GET /lists/{id}` (birds expanded from species.json); `DELETE /lists/{id}` → 204.
+Stored in `data/saved_lists.json` (override with `SAVED_LISTS_PATH`). Bodies over 20 KB get 413.
+**Note: lists are public-writable on the tunnel (no auth).**
+
 ## Setup
     python3 -m venv .venv && .venv/bin/pip install fastapi uvicorn onnxruntime numpy rapidfuzz pytest httpx
     ./download_model.sh        # model files are gitignored

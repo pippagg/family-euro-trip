@@ -2,4 +2,5 @@
 models/
 logs/
 __pycache__/
-.pytest_cache/
+data/saved_lists.json
+data/*.tmp/.pytest_cache/

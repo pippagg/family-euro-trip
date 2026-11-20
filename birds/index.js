@@ -1,5 +1,5 @@
 (async function () {
-  const { h, norm, thumb, isRare, THREATENED, PLACEHOLDER, statusBadge, headerHTML, loadSpecies, iucnCode } = Birds;
+  const { h, norm, thumb, isRare, THREATENED, headerHTML, loadSpecies, iucnCode } = Birds;
   document.getElementById('head').replaceWith(headerHTML('list'));
   const $ = (id) => document.getElementById(id);
   const grid = $('grid');
@@ -50,14 +50,73 @@
   el.female.checked = params.get('female') === '1';
 
   function card(s) {
-    const src = thumb(s);
-    const img = h('img', { src: src || PLACEHOLDER, alt: src ? s.common || '' : '', loading: 'lazy', decoding: 'async', width: 400, height: 300, class: src ? null : 'noph' });
-    img.addEventListener('error', () => { img.src = PLACEHOLDER; img.classList.add('noph'); }, { once: true });
-    return h('a', { class: 'bcard', href: 'bird.html?id=' + encodeURIComponent(s.id) },
-      h('div', { class: 'ph' }, img, THREATENED.includes(s._iucn) ? statusBadge(s._iucn) : null),
-      h('div', { class: 'txt' }, h('strong', { text: s.common || s.scientific }), h('span', { class: 'sci', text: s.scientific || '' }), h('span', { class: 'fam', text: s.family || '' })));
+    const c = Birds.birdCard({ href: 'bird.html?id=' + encodeURIComponent(s.id), common: s.common, scientific: s.scientific, family: s.family, thumb: thumb(s), iucn: s._iucn });
+    const pick = h('button', { class: 'pick', type: 'button', 'aria-pressed': 'false', 'aria-label': 'Select ' + (s.common || s.scientific), text: '+', onclick: () => toggle(s.id) });
+    return h('div', { class: 'bwrap' }, c, pick);
   }
   const cards = new Map();
+
+  // Selection persists across visits in localStorage.
+  const SEL_KEY = 'birds-selected';
+  const byId = new Map(all.map((s) => [s.id, s]));
+  let selected = new Set();
+  try { selected = new Set(JSON.parse(localStorage.getItem(SEL_KEY) || '[]').filter((id) => byId.has(id))); } catch (e) { /* ignore corrupt value */ }
+  const picks = $('picks'), pickCount = $('pickCount'), saveForm = $('saveForm'), listName = $('listName');
+  const saveBtn = $('saveBtn'), pickMsg = $('pickMsg');
+
+  function persistSelection() {
+    try { localStorage.setItem(SEL_KEY, JSON.stringify([...selected])); } catch (e) { /* storage unavailable */ }
+  }
+  function setMsg(node, err) {
+    pickMsg.className = 'msg' + (err ? ' err' : '');
+    pickMsg.replaceChildren(...[].concat(node));
+  }
+  function syncPicks() {
+    cards.forEach((wrap, id) => {
+      const on = selected.has(id);
+      wrap.classList.toggle('sel', on);
+      const b = wrap.querySelector('.pick');
+      b.setAttribute('aria-pressed', String(on));
+      b.textContent = on ? '✓' : '+';
+    });
+    const n = selected.size;
+    picks.hidden = n === 0;
+    document.body.classList.toggle('has-picks', n > 0);
+    pickCount.textContent = `${n} selected`;
+  }
+  function toggle(id) {
+    if (selected.has(id)) selected.delete(id); else selected.add(id);
+    persistSelection();
+    syncPicks();
+    if (!selected.size) setMsg([]);
+  }
+  $('clearPicks').addEventListener('click', () => {
+    selected.clear();
+    persistSelection();
+    syncPicks();
+    setMsg([]);
+  });
+  saveForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = listName.value.trim();
+    if (!name) { setMsg('Give the list a name first.', true); listName.focus(); return; }
+    if (!selected.size) return;
+    saveBtn.disabled = true;
+    setMsg('Saving…');
+    try {
+      const created = await Birds.api('/lists', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, bird_ids: [...selected] }),
+      });
+      listName.value = '';
+      setMsg([`Saved “${created.name}”. `, h('a', { href: 'lists.html?id=' + encodeURIComponent(created.id), text: 'View list →' })]);
+    } catch (err) {
+      setMsg(err.message, true);
+    } finally {
+      saveBtn.disabled = false;
+    }
+  });
 
   function render() {
     const raw = el.q.value.trim();
@@ -77,6 +136,7 @@
       frag.append(c);
     }
     grid.replaceChildren(frag);
+    syncPicks();
     $('count').textContent = list.length === all.length ? `${all.length} species` : `${list.length} of ${all.length} species`;
     $('empty').hidden = list.length > 0;
     $('clear').hidden = !raw;
