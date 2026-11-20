@@ -51,72 +51,24 @@
 
   function card(s) {
     const c = Birds.birdCard({ href: 'bird.html?id=' + encodeURIComponent(s.id), common: s.common, scientific: s.scientific, family: s.family, thumb: thumb(s), iucn: s._iucn });
-    const pick = h('button', { class: 'pick', type: 'button', 'aria-pressed': 'false', 'aria-label': 'Select ' + (s.common || s.scientific), text: '+', onclick: () => toggle(s.id) });
-    return h('div', { class: 'bwrap' }, c, pick);
+    const pick = h('button', { class: 'pick', type: 'button', 'aria-pressed': 'false', text: '+', onclick: () => Birds.toggleBird(s.id) });
+    return h('div', { class: 'bwrap', 'data-name': s.common || s.scientific }, c, pick);
   }
   const cards = new Map();
 
-  // Selection persists across visits in localStorage.
-  const SEL_KEY = 'birds-selected';
-  const byId = new Map(all.map((s) => [s.id, s]));
-  let selected = new Set();
-  try { selected = new Set(JSON.parse(localStorage.getItem(SEL_KEY) || '[]').filter((id) => byId.has(id))); } catch (e) { /* ignore corrupt value */ }
-  const picks = $('picks'), pickCount = $('pickCount'), saveForm = $('saveForm'), listName = $('listName');
-  const saveBtn = $('saveBtn'), pickMsg = $('pickMsg');
-
-  function persistSelection() {
-    try { localStorage.setItem(SEL_KEY, JSON.stringify([...selected])); } catch (e) { /* storage unavailable */ }
-  }
-  function setMsg(node, err) {
-    pickMsg.className = 'msg' + (err ? ' err' : '');
-    pickMsg.replaceChildren(...[].concat(node));
-  }
+  // Shows which cards are in the shared Bharatpur list (state comes from common.js).
   function syncPicks() {
     cards.forEach((wrap, id) => {
-      const on = selected.has(id);
-      wrap.classList.toggle('sel', on);
+      const on = Birds.bharat.ids.includes(id);
       const b = wrap.querySelector('.pick');
+      wrap.classList.toggle('sel', on);
       b.setAttribute('aria-pressed', String(on));
+      b.setAttribute('aria-label', (on ? 'Remove ' : 'Add ') + wrap.dataset.name + (on ? ' from' : ' to') + ' My Bharatpur birds');
       b.textContent = on ? '✓' : '+';
+      b.disabled = Birds.bharat.pending.has(id);
     });
-    const n = selected.size;
-    picks.hidden = n === 0;
-    document.body.classList.toggle('has-picks', n > 0);
-    pickCount.textContent = `${n} selected`;
   }
-  function toggle(id) {
-    if (selected.has(id)) selected.delete(id); else selected.add(id);
-    persistSelection();
-    syncPicks();
-    if (!selected.size) setMsg([]);
-  }
-  $('clearPicks').addEventListener('click', () => {
-    selected.clear();
-    persistSelection();
-    syncPicks();
-    setMsg([]);
-  });
-  saveForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const name = listName.value.trim();
-    if (!name) { setMsg('Give the list a name first.', true); listName.focus(); return; }
-    if (!selected.size) return;
-    saveBtn.disabled = true;
-    setMsg('Saving…');
-    try {
-      const created = await Birds.api('/lists', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, bird_ids: [...selected] }),
-      });
-      listName.value = '';
-      setMsg([`Saved “${created.name}”. `, h('a', { href: 'lists.html?id=' + encodeURIComponent(created.id), text: 'View list →' })]);
-    } catch (err) {
-      setMsg(err.message, true);
-    } finally {
-      saveBtn.disabled = false;
-    }
-  });
+  Birds.subscribe(syncPicks);
 
   function render() {
     const raw = el.q.value.trim();

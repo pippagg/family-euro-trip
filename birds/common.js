@@ -50,16 +50,6 @@
     return h('span', { class: 'badge iucn iucn-' + c, title: IUCN[c], text: c });
   }
 
-  function headerHTML(active) {
-    return h('header', { class: 'bhead' },
-      h('a', { class: 'brand', href: './' }, h('span', { class: 'brand-mark', text: '✦' }), h('span', {}, h('strong', { text: 'Birds of Keoladeo' }), h('small', { text: 'Bharatpur checklist' }))),
-      h('nav', {},
-        h('a', { href: './', 'aria-current': active === 'list' ? 'page' : null, text: 'Checklist' }),
-        h('a', { href: 'identify.html', 'aria-current': active === 'identify' ? 'page' : null, text: '🎙 Identify by sound' }),
-        h('a', { href: 'lists.html', 'aria-current': active === 'lists' ? 'page' : null, text: 'Saved lists' }),
-        h('a', { href: '../', text: 'Trip ↗' })));
-  }
-
   // Fetch JSON from the bird API. Throws Error (with .status for HTTP errors) and returns null for 204.
   async function api(path, opts) {
     const base = String((window.BIRDS_CONFIG || {}).API_BASE || '').replace(/\/+$/, '');
@@ -73,6 +63,81 @@
     return data;
   }
 
+  // The single shared "Bharatpur birds" list. The API is the source of truth;
+  // localStorage is only a cache used when the API cannot be reached.
+  const CACHE_KEY = 'birds-bharatpur';
+  const bharat = { ids: [], offline: false, error: '', pending: new Set() };
+  const subscribers = new Set();
+  try { bharat.ids = JSON.parse(localStorage.getItem(CACHE_KEY) || '[]').filter((x) => typeof x === 'string'); } catch (e) { /* ignore corrupt cache */ }
+
+  function subscribe(fn) { subscribers.add(fn); }
+  function publish() { subscribers.forEach((fn) => fn(bharat)); }
+  function setIds(ids) {
+    bharat.ids = ids;
+    try { localStorage.setItem(CACHE_KEY, JSON.stringify(ids)); } catch (e) { /* storage unavailable */ }
+    publish();
+  }
+
+  async function loadBharatpur() {
+    try {
+      const list = await api('/bharatpur');
+      bharat.offline = false;
+      bharat.error = '';
+      setIds(list.birds.map((b) => b.id));
+    } catch (e) {
+      bharat.offline = true;
+      publish();
+    }
+    return bharat;
+  }
+
+  // Adds the bird if absent, removes it if present. Server response is authoritative; offline falls back to the cache.
+  async function toggleBird(id) {
+    if (bharat.pending.has(id)) return bharat;
+    const on = bharat.ids.includes(id);
+    bharat.pending.add(id);
+    bharat.error = '';
+    publish();
+    try {
+      const list = on
+        ? await api('/bharatpur/birds/' + encodeURIComponent(id), { method: 'DELETE' })
+        : await api('/bharatpur/birds', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ bird_id: id }) });
+      bharat.offline = false;
+      setIds(list.birds.map((b) => b.id));
+    } catch (e) {
+      if (e.status) bharat.error = e.message;
+      else {
+        bharat.offline = true;
+        setIds(on ? bharat.ids.filter((x) => x !== id) : [...bharat.ids, id]);
+      }
+    } finally {
+      bharat.pending.delete(id);
+      publish();
+    }
+    return bharat;
+  }
+
+  function headerHTML(active) {
+    const count = h('span', { text: String(bharat.ids.length) });
+    subscribe(() => { count.textContent = String(bharat.ids.length); });
+    return h('header', { class: 'bhead' },
+      h('a', { class: 'brand', href: './' }, h('span', { class: 'brand-mark', text: '✦' }), h('span', {}, h('strong', { text: 'Birds of Keoladeo' }), h('small', { text: 'Bharatpur checklist' }))),
+      h('nav', {},
+        h('a', { href: './', 'aria-current': active === 'list' ? 'page' : null, text: 'Checklist' }),
+        h('a', { href: 'identify.html', 'aria-current': active === 'identify' ? 'page' : null, text: '🎙 Identify by sound' }),
+        h('a', { href: 'lists.html?id=bharatpur', 'aria-current': active === 'lists' ? 'page' : null }, 'My Bharatpur birds (', count, ')'),
+        h('a', { href: '../', text: 'Trip ↗' })));
+  }
+
+  // Shows a small notice in #sync-notice (if the page has one) for offline or server errors.
+  subscribe(() => {
+    const n = document.getElementById('sync-notice');
+    if (!n) return;
+    const msg = bharat.error || (bharat.offline ? 'Bird server unreachable. Changes are saved on this device only.' : '');
+    n.textContent = msg;
+    n.hidden = !msg;
+  });
+
   // One bird card for any grid: { href, common, scientific, family, thumb (image URL or null), iucn (code or null) }.
   function birdCard({ href, common, scientific, family, thumb: src, iucn }) {
     const img = h('img', { src: src || PLACEHOLDER, alt: src ? common || '' : '', loading: 'lazy', decoding: 'async', width: 400, height: 300, class: src ? null : 'noph' });
@@ -82,5 +147,6 @@
       h('div', { class: 'txt' }, h('strong', { text: common || scientific }), h('span', { class: 'sci', text: scientific || '' }), h('span', { class: 'fam', text: family || '' })));
   }
 
-  window.Birds = { IUCN, THREATENED, PLACEHOLDER, h, loadSpecies, norm, thumb, isRare, safeUrl, iucnCode, statusBadge, headerHTML, api, birdCard };
+  window.Birds = { IUCN, THREATENED, PLACEHOLDER, h, loadSpecies, norm, thumb, isRare, safeUrl, iucnCode, statusBadge, headerHTML, api, birdCard, bharat, subscribe, loadBharatpur, toggleBird };
+  loadBharatpur();
 })();

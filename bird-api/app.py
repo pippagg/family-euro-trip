@@ -32,6 +32,8 @@ MAX_BYTES = MAX_SECONDS * SR * 4
 LIST_NAME_MAX = 80
 LIST_BIRDS_MAX = 460
 LIST_BODY_MAX = 20 * 1024
+BHARATPUR_ID = "bharatpur"
+BHARATPUR_NAME = "Bharatpur birds"
 
 app = FastAPI(title="Bird ID")
 app.add_middleware(
@@ -248,6 +250,7 @@ def get_lists():
     return [
         {"id": l["id"], "name": l["name"], "count": len(l["bird_ids"]), "created_at": l["created_at"]}
         for l in reversed(lists)
+        if l["id"] != BHARATPUR_ID
     ]
 
 
@@ -258,9 +261,7 @@ def get_list(list_id: str):
     entry = next((l for l in lists if l["id"] == list_id), None)
     if entry is None:
         raise HTTPException(404, "list not found")
-    birds = [b for b in (_expand_bird(bid) for bid in entry["bird_ids"]) if b]
-    return {"id": entry["id"], "name": entry["name"], "count": len(entry["bird_ids"]),
-            "created_at": entry["created_at"], "birds": birds}
+    return _expand_list(entry)
 
 
 @app.delete("/lists/{list_id}", status_code=204)
@@ -272,3 +273,63 @@ def delete_list(list_id: str):
             raise HTTPException(404, "list not found")
         write_lists(kept)
     return Response(status_code=204)
+
+
+def _expand_list(entry: dict) -> dict:
+    birds = [b for b in (_expand_bird(bid) for bid in entry["bird_ids"]) if b]
+    return {"id": entry["id"], "name": entry["name"], "count": len(entry["bird_ids"]),
+            "created_at": entry["created_at"], "birds": birds}
+
+
+def _mutate_bharatpur(change=None) -> dict:
+    """Create the fixed Bharatpur list on first use, apply `change` to its bird_ids, persist if needed."""
+    with _lists_lock:
+        lists = read_lists()
+        entry = next((l for l in lists if l["id"] == BHARATPUR_ID), None)
+        created = entry is None
+        if created:
+            entry = {
+                "id": BHARATPUR_ID,
+                "name": BHARATPUR_NAME,
+                "bird_ids": [],
+                "created_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            }
+            lists.append(entry)
+        before = list(entry["bird_ids"])
+        if change:
+            change(entry["bird_ids"])
+        if created or entry["bird_ids"] != before:
+            write_lists(lists)
+        return _expand_list(entry)
+
+
+@app.get("/bharatpur")
+def get_bharatpur():
+    return _mutate_bharatpur()
+
+
+@app.post("/bharatpur/birds")
+async def add_bharatpur_bird(request: Request):
+    data = await _json_body(request)
+    bid = data.get("bird_id")
+    if not isinstance(bid, str) or bid not in _state["species_by_id"]:
+        raise HTTPException(400, "unknown bird_id")
+
+    def add(ids: list[str]):
+        if bid not in ids:
+            ids.append(bid)
+
+    return await asyncio.get_running_loop().run_in_executor(None, _mutate_bharatpur, add)
+
+
+@app.delete("/bharatpur/birds/{bird_id}")
+def remove_bharatpur_bird(bird_id: str):
+    if bird_id not in _state["species_by_id"]:
+        raise HTTPException(404, "unknown bird_id")
+
+    def remove(ids: list[str]):
+        if bird_id in ids:
+            ids.remove(bird_id)
+
+    return _mutate_bharatpur(remove)
+
