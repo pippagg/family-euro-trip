@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#102d34" />
+<title>Identify by sound · Birds of Keoladeo</title>
+<link rel="stylesheet" href="birds.css" />
+</head>
+<body>
+<div id="head"></div>
+<main class="wrap">
+  <section class="hero">
+    <p class="eyebrow">Powered by BirdNET</p>
+    <h1>Identify by sound</h1>
+    <p class="muted">Record up to 60 seconds, get likely species. Best with a close, clear call and little wind.</p>
+  </section>
+  <section class="panel">
+    <button class="recbtn" id="rec" type="button"><span aria-hidden="true">🎙</span><span id="recLabel">Start recording</span></button>
+    <div class="timer" id="timer" aria-live="off">0:00 / 1:00</div>
+    <div class="meter" aria-hidden="true"><i id="level"></i></div>
+    <p class="upload"><label>Or upload an audio file: <input type="file" id="file" accept="audio/*" /></label></p>
+    <p class="status" id="status" role="status" aria-live="polite"></p>
+  </section>
+  <section id="resultsWrap" hidden>
+    <h2>Likely species</h2>
+    <div class="results" id="results"></div>
+  </section>
+  <p class="muted"><a href="./" style="text-decoration:underline">← Back to the checklist</a></p>
+</main>
+<script src="config.js"></script>
+<script src="common.js"></script>
+<script src="identify.js"></script>
+</body>
+</html>

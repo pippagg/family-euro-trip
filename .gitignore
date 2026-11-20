@@ -1,1 +1,5 @@
 gemini.txt
+bird-api/.venv/
+bird-api/models/
+bird-api/logs/
+__pycache__/

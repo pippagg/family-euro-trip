@@ -1,0 +1,233 @@
+[
+ {
+  "id": "indian-peafowl",
+  "order": "Galliformes",
+  "family": "Phasianidae",
+  "common": "Indian Peafowl",
+  "scientific": "Pavo cristatus",
+  "local_name": "मोर",
+  "status": null,
+  "rarity": "common",
+  "ebird_code": "compea",
+  "links": {
+   "avibase": "https://avibase.bsc-eoc.org/",
+   "bow": "https://birdsoftheworld.org/bow/species/compea",
+   "ebird": "https://ebird.org/species/compea",
+   "macaulay": "https://search.macaulaylibrary.org/",
+   "wikipedia": "https://en.wikipedia.org/wiki/Indian_Peafowl",
+   "xenocanto": "https://xeno-canto.org/"
+  },
+  "summary": "The Indian Peafowl is a regularly seen bird of Keoladeo National Park.",
+  "male": "Iridescent blue with a long train.",
+  "female": "Brown with a green neck.",
+  "where_found": "Wetlands and wooded areas across the park.",
+  "habitat": "Marsh, scrub",
+  "size": "40 cm",
+  "photos": [
+   {
+    "url": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='300'><rect width='400' height='300' fill='%23167b75'/><text x='200' y='160' font-size='28' text-anchor='middle' fill='white'>Male</text></svg>",
+    "full": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='300'><rect width='400' height='300' fill='%23167b75'/><text x='200' y='160' font-size='28' text-anchor='middle' fill='white'>Male</text></svg>",
+    "caption": "Male",
+    "sex": "male",
+    "type": "photo",
+    "credit": "Sample Author",
+    "license": "CC BY-SA 4.0",
+    "source": "https://commons.wikimedia.org/"
+   },
+   {
+    "url": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='300'><rect width='400' height='300' fill='%23e27e5d'/><text x='200' y='160' font-size='28' text-anchor='middle' fill='white'>Female</text></svg>",
+    "full": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='300'><rect width='400' height='300' fill='%23e27e5d'/><text x='200' y='160' font-size='28' text-anchor='middle' fill='white'>Female</text></svg>",
+    "caption": "Female",
+    "sex": "female",
+    "type": "photo",
+    "credit": "Sample Author",
+    "license": "CC BY-SA 4.0",
+    "source": "https://commons.wikimedia.org/"
+   }
+  ]
+ },
+ {
+  "id": "sarus-crane",
+  "order": "Gruiformes",
+  "family": "Gruidae",
+  "common": "Sarus Crane",
+  "scientific": "Antigone antigone",
+  "local_name": "सारस",
+  "status": "VU",
+  "rarity": "common",
+  "ebird_code": "sarcra1",
+  "links": {
+   "avibase": "https://avibase.bsc-eoc.org/",
+   "bow": "https://birdsoftheworld.org/bow/species/sarcra1",
+   "ebird": "https://ebird.org/species/sarcra1",
+   "macaulay": "https://search.macaulaylibrary.org/",
+   "wikipedia": "https://en.wikipedia.org/wiki/Sarus_Crane",
+   "xenocanto": "https://xeno-canto.org/"
+  },
+  "summary": "World's tallest flying bird.",
+  "male": null,
+  "female": null,
+  "where_found": "Wetlands and wooded areas across the park.",
+  "habitat": "Marsh, scrub",
+  "size": "40 cm",
+  "photos": [
+   {
+    "url": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='300'><rect width='400' height='300' fill='%23687b7e'/><text x='200' y='160' font-size='28' text-anchor='middle' fill='white'>Adult</text></svg>",
+    "full": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='300'><rect width='400' height='300' fill='%23687b7e'/><text x='200' y='160' font-size='28' text-anchor='middle' fill='white'>Adult</text></svg>",
+    "caption": "Adult",
+    "sex": null,
+    "type": "photo",
+    "credit": "Sample Author",
+    "license": "CC BY-SA 4.0",
+    "source": "https://commons.wikimedia.org/"
+   }
+  ]
+ },
+ {
+  "id": "painted-stork",
+  "order": "Pelecaniformes",
+  "family": "Ciconiidae",
+  "common": "Painted Stork",
+  "scientific": "Mycteria leucocephala",
+  "local_name": "जांघिल",
+  "status": "NT",
+  "rarity": "common",
+  "ebird_code": "paisto1",
+  "links": {
+   "avibase": "https://avibase.bsc-eoc.org/",
+   "bow": "https://birdsoftheworld.org/bow/species/paisto1",
+   "ebird": "https://ebird.org/species/paisto1",
+   "macaulay": "https://search.macaulaylibrary.org/",
+   "wikipedia": "https://en.wikipedia.org/wiki/Painted_Stork",
+   "xenocanto": "https://xeno-canto.org/"
+  },
+  "summary": "The Painted Stork is a regularly seen bird of Keoladeo National Park.",
+  "male": null,
+  "female": null,
+  "where_found": "Wetlands and wooded areas across the park.",
+  "habitat": "Marsh, scrub",
+  "size": "40 cm",
+  "photos": [
+   {
+    "url": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='300'><rect width='400' height='300' fill='%23edc875'/><text x='200' y='160' font-size='28' text-anchor='middle' fill='white'>Adult</text></svg>",
+    "full": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='300'><rect width='400' height='300' fill='%23edc875'/><text x='200' y='160' font-size='28' text-anchor='middle' fill='white'>Adult</text></svg>",
+    "caption": "Adult",
+    "sex": null,
+    "type": "photo",
+    "credit": "Sample Author",
+    "license": "CC BY-SA 4.0",
+    "source": "https://commons.wikimedia.org/"
+   },
+   {
+    "url": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='300'><rect width='400' height='300' fill='%23555'/><text x='200' y='160' font-size='28' text-anchor='middle' fill='white'>Range</text></svg>",
+    "full": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='300'><rect width='400' height='300' fill='%23555'/><text x='200' y='160' font-size='28' text-anchor='middle' fill='white'>Range</text></svg>",
+    "caption": "Range",
+    "sex": null,
+    "type": "map",
+    "credit": "Sample Author",
+    "license": "CC BY-SA 4.0",
+    "source": "https://commons.wikimedia.org/"
+   }
+  ]
+ },
+ {
+  "id": "siberian-crane",
+  "order": "Gruiformes",
+  "family": "Gruidae",
+  "common": "Siberian Crane",
+  "scientific": "Leucogeranus leucogeranus",
+  "local_name": "साइबेरियन सारस",
+  "status": "CR",
+  "rarity": "rare",
+  "ebird_code": "sibcra1",
+  "links": {
+   "avibase": "https://avibase.bsc-eoc.org/",
+   "bow": "https://birdsoftheworld.org/bow/species/sibcra1",
+   "ebird": "https://ebird.org/species/sibcra1",
+   "macaulay": "https://search.macaulaylibrary.org/",
+   "wikipedia": "https://en.wikipedia.org/wiki/Siberian_Crane",
+   "xenocanto": "https://xeno-canto.org/"
+  },
+  "summary": "The Siberian Crane is a regularly seen bird of Keoladeo National Park.",
+  "male": null,
+  "female": null,
+  "where_found": "Wetlands and wooded areas across the park.",
+  "habitat": "Marsh, scrub",
+  "size": "40 cm",
+  "photos": []
+ },
+ {
+  "id": "greater-spotted-eagle",
+  "order": "Accipitriformes",
+  "family": "Accipitridae",
+  "common": "Greater Spotted Eagle",
+  "scientific": "Clanga clanga",
+  "local_name": "बड़ा चितला उकाब",
+  "status": "VU",
+  "rarity": "accidental",
+  "ebird_code": "grseag1",
+  "links": {
+   "avibase": "https://avibase.bsc-eoc.org/",
+   "bow": "https://birdsoftheworld.org/bow/species/grseag1",
+   "ebird": "https://ebird.org/species/grseag1",
+   "macaulay": "https://search.macaulaylibrary.org/",
+   "wikipedia": "https://en.wikipedia.org/wiki/Greater_Spotted_Eagle",
+   "xenocanto": "https://xeno-canto.org/"
+  },
+  "summary": null,
+  "male": null,
+  "female": null,
+  "where_found": null,
+  "habitat": "Marsh, scrub",
+  "size": "40 cm",
+  "photos": [
+   {
+    "url": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='300'><rect width='400' height='300' fill='%23102d34'/><text x='200' y='160' font-size='28' text-anchor='middle' fill='white'>Juvenile</text></svg>",
+    "full": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='300'><rect width='400' height='300' fill='%23102d34'/><text x='200' y='160' font-size='28' text-anchor='middle' fill='white'>Juvenile</text></svg>",
+    "caption": "Juvenile",
+    "sex": "juvenile",
+    "type": "photo",
+    "credit": "Sample Author",
+    "license": "CC BY-SA 4.0",
+    "source": "https://commons.wikimedia.org/"
+   }
+  ]
+ },
+ {
+  "id": "common-kingfisher",
+  "order": "Coraciiformes",
+  "family": "Alcedinidae",
+  "common": "Common Kingfisher",
+  "scientific": "Alcedo atthis",
+  "local_name": "छोटा किलकिला",
+  "status": null,
+  "rarity": "common",
+  "ebird_code": "comkin1",
+  "links": {
+   "avibase": "https://avibase.bsc-eoc.org/",
+   "bow": "https://birdsoftheworld.org/bow/species/comkin1",
+   "ebird": "https://ebird.org/species/comkin1",
+   "macaulay": "https://search.macaulaylibrary.org/",
+   "wikipedia": "https://en.wikipedia.org/wiki/Common_Kingfisher",
+   "xenocanto": "https://xeno-canto.org/"
+  },
+  "summary": "The Common Kingfisher is a regularly seen bird of Keoladeo National Park.",
+  "male": null,
+  "female": null,
+  "where_found": "Wetlands and wooded areas across the park.",
+  "habitat": "Marsh, scrub",
+  "size": null,
+  "photos": [
+   {
+    "url": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='300'><rect width='400' height='300' fill='%23167b75'/><text x='200' y='160' font-size='28' text-anchor='middle' fill='white'>Adult</text></svg>",
+    "full": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='300'><rect width='400' height='300' fill='%23167b75'/><text x='200' y='160' font-size='28' text-anchor='middle' fill='white'>Adult</text></svg>",
+    "caption": "Adult",
+    "sex": null,
+    "type": "photo",
+    "credit": "Sample Author",
+    "license": "CC BY-SA 4.0",
+    "source": "https://commons.wikimedia.org/"
+   }
+  ]
+ }
+]

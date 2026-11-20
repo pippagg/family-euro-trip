@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="Field guide to the birds of Keoladeo National Park, Bharatpur." />
+<meta name="theme-color" content="#102d34" />
+<title>Birds of Keoladeo · Bharatpur</title>
+<link rel="stylesheet" href="birds.css" />
+</head>
+<body>
+<div id="head"></div>
+<main class="wrap">
+  <section class="hero">
+    <p class="eyebrow">Keoladeo National Park · Bharatpur</p>
+    <h1>Birds of Keoladeo</h1>
+    <a class="mic-cta" href="identify.html"><span class="mic" aria-hidden="true">🎙</span><span><strong>Identify by sound</strong><small>Record a bird call and get likely species</small></span></a>
+  </section>
+  <section class="controls" aria-label="Search and filters">
+    <label class="search"><span aria-hidden="true">⌕</span><input id="q" type="search" placeholder="Search name, Hindi name, family…" autocomplete="off" aria-label="Search birds" /><button id="clear" type="button" aria-label="Clear search" hidden>×</button></label>
+    <div class="filters">
+      <select id="order" aria-label="Group (order)"><option value="">All groups</option></select>
+      <select id="rarity" aria-label="Rarity"><option value="">Any rarity</option><option value="common">Common</option><option value="rare">Rare / accidental</option></select>
+      <select id="sort" aria-label="Sort"><option value="">Checklist order</option><option value="az">A–Z</option></select>
+      <label class="chip"><input type="checkbox" id="threat" />Threatened</label>
+      <label class="chip"><input type="checkbox" id="male" />♂ photos</label>
+      <label class="chip"><input type="checkbox" id="female" />♀ photos</label>
+    </div>
+  </section>
+  <p class="count" id="count" aria-live="polite">Loading…</p>
+  <div class="grid" id="grid"></div>
+  <p class="empty" id="empty" hidden>No birds match. Try fewer filters.</p>
+</main>
+<footer class="bfoot">Photos and data: Wikimedia Commons, eBird, IUCN. See each bird page for credits.</footer>
+<script src="config.js"></script>
+<script src="common.js"></script>
+<script src="index.js"></script>
+</body>
+</html>

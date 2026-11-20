@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#1f3d2b" />
+<title>Bird ID · Bharatpur</title>
+<style>
+  :root { --bg:#f4f1e8; --ink:#1d2a22; --accent:#1f3d2b; --mute:#6b7a70; --card:#fff; --rec:#c0392b; }
+  * { box-sizing:border-box; }
+  body { margin:0; font:16px/1.45 system-ui,sans-serif; background:var(--bg); color:var(--ink); }
+  header { background:var(--accent); color:#fff; padding:18px 16px; }
+  header h1 { margin:0; font-size:1.3rem; }
+  header p { margin:4px 0 0; opacity:.8; font-size:.9rem; }
+  main { max-width:640px; margin:0 auto; padding:16px; }
+  .card { background:var(--card); border-radius:12px; padding:16px; margin-bottom:14px; box-shadow:0 1px 3px #0002; }
+  button { font:inherit; border:0; border-radius:10px; padding:12px 16px; background:var(--accent); color:#fff; cursor:pointer; }
+  button:disabled { opacity:.5; cursor:default; }
+  button.rec { background:var(--rec); width:100%; font-size:1.1rem; padding:16px; }
+  .mute { color:var(--mute); font-size:.85rem; }
+  ul { list-style:none; margin:0; padding:0; }
+  li { padding:10px 0; border-bottom:1px solid #0001; }
+  li:last-child { border:0; }
+  .bar { height:8px; background:#e3e8e4; border-radius:4px; margin-top:6px; overflow:hidden; }
+  .bar i { display:block; height:100%; background:#3f8f5a; }
+  .sci { font-style:italic; color:var(--mute); font-size:.85rem; }
+  #level { height:6px; background:#e3e8e4; border-radius:3px; overflow:hidden; margin-top:10px; }
+  #level i { display:block; height:100%; width:0; background:var(--rec); }
+  audio { width:100%; margin-top:10px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>🐦 Bird ID · Bharatpur</h1>
+  <p>Record a short clip and get likely species.</p>
+</header>
+<main>
+  <section class="card">
+    <button class="rec" id="rec">● Record (tap to start / stop)</button>
+    <div id="level"><i></i></div>
+    <p class="mute">Best with 5–30 s clips, bird close and clear. Or upload a file:</p>
+    <input type="file" id="file" accept="audio/*" />
+    <audio id="player" controls hidden></audio>
+    <p class="mute" id="status"></p>
+  </section>
+
+  <section class="card" id="results" hidden>
+    <h2 style="margin-top:0;font-size:1.1rem">Likely species</h2>
+    <ul id="list"></ul>
+  </section>
+
+  <p class="mute">
+    Model: <a href="https://huggingface.co/tphakala/BirdNET-v3.0-Models">BirdNET v3.0 developer preview 3.1</a>
+    (Cornell Lab of Ornithology, Chemnitz Univ. of Technology), CC BY-SA 4.0.
+    Preview model; treat results as hints, not certainty.
+  </p>
+</main>
+
+<script>
+const API_URL = 'https://fame-humans-kevin-ton.trycloudflare.com/identify';
+const SR = 32000, MAX_SECONDS = 60, MIN_CONF = 0.05, TOP_K = 10;
+const $ = id => document.getElementById(id);
+
+async function toMono32k(arrayBuf) {
+  const ctx = new (window.AudioContext || window.webkitAudioContext)();
+  const decoded = await ctx.decodeAudioData(arrayBuf);
+  ctx.close();
+  if (decoded.duration > MAX_SECONDS) throw new Error(`Clip is longer than ${MAX_SECONDS} s.`);
+  const off = new OfflineAudioContext(1, Math.max(1, Math.ceil(decoded.duration * SR)), SR);
+  const src = off.createBufferSource();
+  src.buffer = decoded; src.connect(off.destination); src.start();
+  return (await off.startRendering()).getChannelData(0);
+}
+
+function show(results) {
+  $('results').hidden = false;
+  $('list').innerHTML = results.length ? results.map(r => `
+    <li><b>${r.common}</b> <span class="sci">${r.scientific}</span> · ${Math.round(r.confidence * 100)}%
+      <div class="bar"><i style="width:${Math.round(r.confidence * 100)}%"></i></div></li>`).join('')
+    : '<li class="mute">No confident detections. Try a longer or closer recording.</li>';
+}
+
+async function analyse(arrayBuf) {
+  $('status').textContent = 'Analysing…';
+  try {
+    const pcm = await toMono32k(arrayBuf);
+    const res = await fetch(`${API_URL}?min_conf=${MIN_CONF}&top_k=${TOP_K}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/octet-stream' },
+      body: pcm,
+    });
+    if (!res.ok) throw new Error(`API ${res.status}: ${await res.text()}`);
+    const data = await res.json();
+    show(data.results);
+    $('status').textContent = `Done · ${data.duration_s} s analysed.`;
+  } catch (e) {
+    $('status').textContent = 'Error: ' + e.message;
+  }
+}
+
+let recorder = null, chunks = [], stream, raf, actx;
+$('rec').onclick = async () => {
+  if (recorder) { recorder.stop(); return; }
+  try {
+    // Voice-oriented processing removes faint bird calls
+    stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false } });
+  } catch (e) { $('status').textContent = 'Microphone blocked: ' + e.message; return; }
+  chunks = [];
+  recorder = new MediaRecorder(stream);
+  recorder.ondataavailable = e => chunks.push(e.data);
+  actx = new (window.AudioContext || window.webkitAudioContext)();
+  const analyser = actx.createAnalyser();
+  actx.createMediaStreamSource(stream).connect(analyser);
+  const buf = new Uint8Array(analyser.fftSize);
+  (function tick() {
+    analyser.getByteTimeDomainData(buf);
+    let m = 0; for (const v of buf) m = Math.max(m, Math.abs(v - 128));
+    $('level').firstElementChild.style.width = Math.min(100, m / 64 * 100) + '%';
+    raf = requestAnimationFrame(tick);
+  })();
+  recorder.onstop = async () => {
+    cancelAnimationFrame(raf); actx.close();
+    stream.getTracks().forEach(t => t.stop());
+    const blob = new Blob(chunks, { type: recorder.mimeType });
+    recorder = null;
+    $('rec').textContent = '● Record (tap to start / stop)';
+    $('level').firstElementChild.style.width = '0';
+    $('player').src = URL.createObjectURL(blob); $('player').hidden = false;
+    await analyse(await blob.arrayBuffer());
+  };
+  recorder.start();
+  $('rec').textContent = '■ Stop & identify';
+};
+
+$('file').onchange = async e => {
+  const f = e.target.files[0];
+  if (!f) return;
+  $('player').src = URL.createObjectURL(f); $('player').hidden = false;
+  await analyse(await f.arrayBuffer());
+};
+</script>
+</body>
+</html>
